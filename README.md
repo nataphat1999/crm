@@ -1,5 +1,5 @@
-✈️ Travel Expense Management System
-This project is a comprehensive module for managing employee travel reimbursements, built with the Yii2 Framework
+✈️ CRM System: Travel Expense Module
+This repository contains the Travel Expense management module, a core component of our CRM system developed using the Yii2 Framework. It streamlines the process of reimbursement requests and approval tracking
 
 📑 Features
 - Request Management: Create, edit, and track travel expense requests
