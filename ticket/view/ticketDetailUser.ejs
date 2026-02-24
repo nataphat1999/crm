@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+<%- include('head', { title: 'Ticket Detail' }) %>
+
+    <body>
+        <%- include('header') %>
+            <div class="loader"></div>
+            <div class="container">
+                <div class="pt-5">
+                    <% if(!session.user_id) { %>
+                        <script>
+                            document.location.href = '/'
+                        </script>
+
+                        <% } else { %>
+                            <h1>Ticket Detail User</h1>
+                </div>
+            </div>
+            <input type="hidden" name="user_email" id="user_email" value="<%= session.user_email %>">
+            <input type="hidden" name="user_type" id="user_type" value="<%= session.user_type_id %>">
+            <input type="hidden" name="user_first_name" id="user_first_name" value="<%= session.user_firstname %>">
+            <input type="hidden" name="user_last_name" id="user_last_name" value="<%= session.user_lastname %>">
+
+            <!-- Card -->
+            <div class="container">
+                <div class="card">
+                    <div class="card-body">
+                        <form class="container" id="add_ticket_approve" onsubmit="return false" autocomplete="off"
+                            enctype="multipart/form-data">
+                            <div class="text-end" id="status_head">
+
+                            </div>
+                            <div class="row pt-3">
+                                <div class="col-md-4 col-sm-4 col-lg">
+                                    <div class="mb-3">
+                                        <label for="ticket_department_selected" class="form-label"
+                                            id="label_ticket_department">Assign to Department</label>
+                                        <select class="form-select" id="ticket_department_selected" disabled>
+                                            <option value>Please select
+                                                department</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-lg">
+                                    <div class="mb-3">
+                                        <label for="ticket_no" class="form-label">Ticket No</label>
+                                        <input type="text" class="form-control" id="ticket_no" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-lg">
+                                    <div class="mb-3">
+                                        <label for="ticket_name" class="form-label">Ticket Name</label>
+                                        <input type="text" class="form-control" id="ticket_name" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-3" id="form_ticket_date_col_12">
+                                <div class="col-md-12 col-sm-4 col-lg">
+                                    <div class="mb-3">
+                                        <label for="ticket_date" class="form-label">Ticket Date</label>
+                                        <input type="text" class="form-control" id="ticket_date" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-3" id="form_ticket_date_col_6">
+                                <div class="col-md-6 col-sm-4 col-lg">
+                                    <div class="mb-3">
+                                        <label for="ticket_date_col_6" class="form-label">Ticket Date</label>
+                                        <input type="text" class="form-control" id="ticket_date_col_6" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-4 col-lg">
+                                    <div class="mb-3">
+                                        <label for="ticket_due_date_user_col_6" class="form-label">Estimate Date</label>
+                                        <input type="text" class="form-control" id="ticket_due_date_user_col_6"
+                                            disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-3" id="form_start_end_date">
+                                <div class="col-md-6 col-sm-4 col-lg">
+                                    <div class="mb-3">
+                                        <label for="ticket_start_date" id="label_ticket_start_date"
+                                            class="form-label">Start Date</label>
+                                        <input type="text" class="form-control" id="ticket_start_date" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-4 col-lg">
+                                    <div class="mb-3">
+                                        <label for="ticket_end_date" id="label_ticket_end_date" class="form-label">End
+                                            Date</label>
+                                        <input type="text" class="form-control" id="ticket_end_date" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-3" id="form_estimate_due_date">
+                                <div class="col-md-6 col-sm-4 col-lg">
+                                    <div class="mb-3">
+                                        <label for="ticket_due_date_user" class="form-label">Estimate Date</label>
+                                        <input type="text" class="form-control" id="ticket_due_date_user" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-4 col-lg">
+                                    <div class="mb-3">
+                                        <label for="ticket_due_date_manager" class="form-label label-inline">
+                                            Due Date
+                                            <div id="custom_duedate">
+                                                <input type="checkbox" id="custom_due_date">
+                                                <label for="custom_due_date">Change
+                                                    Due Date</label>
+                                            </div>
+                                        </label>
+                                        <input type="text" class="form-control" id="ticket_due_date_manager" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3" id="note_duedate">
+                                <div class="col-md-12 col-sm-4 col-lg">
+                                    <div class="mb-3">
+                                        <label for="duedate_remark" class="form-label">Change Due Date
+                                            Remark</label>
+                                        <textarea type="text" class="form-control" id="duedate_remark"
+                                            rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div id="form_file_note_duedate" class="col-md-12 col-sm-4 col-lg">
+                                    <div class="mb-3">
+                                        <div class="btn_file_duedate">
+                                            <label for="ticket_attachment_duedate" id="label_attachment_duedate">
+                                                <input type="file" id="ticket_attachment_duedate" multiple>
+                                                Upload Files
+                                            </label>
+                                        </div>
+                                        <div class="files">
+                                            <label>Change Due Date Files</label>
+                                            <div id="files_change_duedate"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-3" id="form_type_category">
+                                <div class="col-md-6 col-sm-4 col-lg">
+                                    <div class="mb-3">
+                                        <label for="ticket_type_selected" class="form-label"
+                                            id="label_ticket_type">Type</label>
+                                        <select class="form-select" id="ticket_type_selected">
+                                            <option value>Please select
+                                                type</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-4 col-lg">
+                                    <div class="mb-3">
+                                        <label for="ticket_category_selected" class="form-label"
+                                            id="label_ticket_category">Category</label>
+                                        <select class="form-select" id="ticket_category_selected">
+                                            <option value>Please select
+                                                category</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-4 col-lg" id="form_severity_detail">
+                                <div class="row pt-3">
+                                    <div class="col-md-6 col-sm-4 col-lg">
+                                        <div class="mb-3">
+                                            <label for="severity_detail" class="form-label">Severity</label>
+                                            <select class="form-select" aria-label="Default select Severity"
+                                                id="severity_detail">
+                                                <option value>Please select
+                                                    Severity</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-4 col-lg">
+                                        <div class="mb-3">
+                                            <label for="level_detail" class="form-label">Level</label>
+                                            <select class="form-select" aria-label="Default select Level"
+                                                id="level_detail">
+                                                <option value>Please select
+                                                    Level</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-4 col-lg mb-3">
+                                <div class="mb-3">
+                                    <label for="ticket_project_name" class="form-label">Project Code</label>
+                                    <select class="form-select" aria-label="Default select Project Code"
+                                        id="ticket_project_name">
+                                        <option value>Please select Project
+                                            Code</option>
+                                    </select>
+                                    <div class="mt-1" id="form_ticket_project_name_other_checkbox">
+                                        <input type="checkbox" id="ticket_project_name_other_checkbox">
+                                        <label for="ticket_project_name_other_checkbox"
+                                            id="ticket_project_name_other_label">อื่นๆ</label>
+                                        <div id="ticket_project_name_other_form">
+                                            <input type="text" class="form-control" id="ticket_project_name_other">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-4 col-lg">
+                                <div class="mb-3">
+                                    <label for="ticket_objective" class="form-label">Objective</label>
+                                    <textarea type="text" class="form-control" id="ticket_objective" rows="5"
+                                        disabled></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-4 col-lg">
+                                <div class="mb-3">
+                                    <label for="ticket_description" class="form-label">Description</label>
+                                    <textarea type="text" class="form-control" id="ticket_description" rows="5"
+                                        disabled></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-4 col-lg" id="file_user">
+                                <div class="mb-3">
+                                    <label class="form-label">Attachment :
+                                        User</label>
+                                    <div class="files">
+                                        <label>Files Selected</label>
+                                        <div id="files_selected"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="form_file_user_reject" class="col-md-12 col-sm-4 col-lg">
+                                <div class="mb-3">
+                                    <label class="form-label">Attachment</label>
+                                    <div>
+                                        <label for="ticket_attachment" id="label_ticket_attachment">
+                                            <input type="file" id="ticket_attachment" multiple>
+                                            Upload Files
+                                        </label>
+                                    </div>
+                                    <div class="files">
+                                        <label>Files Selected</label>
+                                        <div id="files_selected_reject"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 col-sm-4 col-lg" id="add_file_dev">
+                                <div class="mb-3">
+                                    <label class="form-label">Attachment :
+                                        Operator</label>
+                                    <div class="btn_file_dev">
+                                        <label for="ticket_attachment_dev" id="label_ticket_attachment_dev">
+                                            <input type="file" id="ticket_attachment_dev" multiple>
+                                            Upload Files
+                                        </label>
+                                    </div>
+                                    <div class="file_dev">
+                                        <label>Files Selected</label>
+                                        <div id="files_selected_dev"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-4 col-lg" id="update_file_dev">
+                                <div class="mb-3">
+                                    <label class="form-label">Attachment :
+                                        Operator</label>
+                                    <div class="btn_file_dev_update">
+                                        <label for="ticket_attachment_dev_update"
+                                            id="label_ticket_attachment_dev_update">
+                                            <input type="file" id="ticket_attachment_dev_update" multiple>
+                                            Upload Update Files
+                                        </label>
+                                    </div>
+                                    <div class="file_dev">
+                                        <label>Files Operator Selected</label>
+                                        <div id="files_selected_dev_update"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-4 col-lg" id="show_file_dev">
+                                <div class="mb-3">
+                                    <label class="form-label">Attachment :
+                                        Operator</label>
+                                    <div class="file_dev_show_detail">
+                                        <label>Files Selected</label>
+                                        <div id="show_files_selected_dev"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="form_areject_description" class="col-md-12 col-sm-4 col-lg">
+                                <div class="mb-3">
+                                    <label for="reject_description" class="form-label">Approver's Latest
+                                        Rejection Note</label>
+                                    <textarea type="text" class="form-control" id="reject_adescription" rows="5"
+                                        disabled></textarea>
+                                </div>
+                            </div>
+                            <div id="form_file_approver_reject" class="col-md-12 col-sm-4 col-lg">
+                                <div class="mb-3">
+                                    <div class="files">
+                                        <label>Files Rejected by Approver</label>
+                                        <div id="files_approver_reject"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="form_disapprover_description" class="col-md-12 col-sm-4 col-lg">
+                                <div class="mb-3">
+                                    <label for="disapprover_description" class="form-label">Disapprover Note</label>
+                                    <textarea type="text" class="form-control" id="disapprover_description" rows="5"
+                                        disabled></textarea>
+                                </div>
+                            </div>
+                            <div id="form_file_disapprover" class="col-md-12 col-sm-4 col-lg">
+                                <div class="mb-3">
+                                    <div class="files">
+                                        <label>Disapprover Files</label>
+                                        <div id="files_approver_disapprover"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 col-sm-4 col-lg">
+                                <div class="mb-3">
+                                    <label for="ticket_programmer" class="form-label"
+                                        id="label_programmer_name">Operator
+                                        Name</label>
+                                    <select class="form-select" id="ticket_programmer_selected"
+                                        name="ticket_programmer_selected[]" multiple="multiple">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-4 col-lg" id="selected_approve">
+                                <label class="form-label">*Select :
+                                    Approve/Reject</label><br><br>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Approve"
+                                        value="Approve">
+                                    <label class="form-check-label" for="Approve">Approve</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Reject"
+                                        value="Reject">
+                                    <label class="form-check-label" for="Reject">Reject</label>
+                                </div>
+                            </div>
+                            <!-- <div id="form_reject_description"
+                            class="col-md-12 col-sm-4 col-lg">
+                            <div class="mb-3">
+                                <label for="reject_description"
+                                    class="form-label">Reject
+                                    Description</label>
+                                <textarea type="text" class="form-control"
+                                    id="reject_description" rows="5"
+                                    disabled></textarea>
+                            </div>
+                        </div> -->
+                            <div class="col-md-12 col-sm-4 col-lg" id="textarea_note_reject">
+                                <div class="mb-3">
+                                    <label for="ticket_reject_note" class="form-label">Reject Note:</label>
+                                    <textarea type="text" class="form-control" id="ticket_reject_note"
+                                        rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-4 col-lg" id="textarea_note_disapprove">
+                                <div class="mb-3">
+                                    <label for="ticket_reject_approver_note" class="form-label">Note:</label>
+                                    <textarea type="text" class="form-control" id="ticket_reject_approver_note"
+                                        rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-4 col-lg" id="add_file_reject_approver">
+                                <div class="mb-3">
+                                    <label class="form-label">Attachment :
+                                        Reject</label>
+                                    <div class="btn_file_reject_approver">
+                                        <label for="ticket_attachment_reject_approver"
+                                            id="label_ticket_attachment_reject_approver">
+                                            <input type="file" id="ticket_attachment_reject_approver" multiple>
+                                            Upload Files
+                                        </label>
+                                    </div>
+                                    <div class="files">
+                                        <label>Files Selected</label>
+                                        <div id="files_selected_reject_approver"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="form_file_user_reject_to_approver" class="col-md-12 col-sm-4 col-lg">
+                                <div class="mb-3">
+                                    <label for="ticket_reject_approver_note" class="form-label">Reject Note to
+                                        Approver:</label>
+                                    <textarea type="text" class="form-control" id="ticket_reject_approver_note_detail"
+                                        rows="3" disabled></textarea>
+                                </div>
+                                <div id="file_user_reject_to_approver" class="mb-0">
+                                    <p class="form-label">Attachment Reject:</p>
+                                    <div id="files_selected_reject_to_approver"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 col-sm-4 col-lg pt-3" id="textarea_note_cancel">
+                                <div class="mb-3">
+                                    <label for="ticket_disapprove_note" class="form-label">Cancel Note</label>
+                                    <textarea type="text" class="form-control" id="ticket_note_cancel" rows="3"
+                                        disabled></textarea>
+                                </div>
+                            </div>
+                            <br><br><br>
+                            <div class="col-md-12 col-sm-4 col-lg text-center" id="selected_approve_star_manager">
+                                <h3>Performance rating</h3>
+                                <p>score: <span class="scoreNow">0</span> out of
+                                    <span>5</span>
+                                </p>
+                                <ul class="ratingW" style="padding-left: 0rem;">
+                                    <li class="javascript:void(0);">
+                                        <a href="javascript:void(0);">
+                                            <div class="star"></div>
+                                        </a>
+                                    </li>
+                                    <li class="javascript:void(0);">
+                                        <a href="javascript:void(0);">
+                                            <div class="star"></div>
+                                        </a>
+                                    </li>
+                                    <li class="javascript:void(0);">
+                                        <a href="javascript:void(0);">
+                                            <div class="star"></div>
+                                        </a>
+                                    </li>
+                                    <li class="javascript:void(0);">
+                                        <a href="javascript:void(0);">
+                                            <div class="star"></div>
+                                        </a>
+                                    </li>
+                                    <li class="javascript:void(0);">
+                                        <a href="javascript:void(0);">
+                                            <div class="star"></div>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                            </div>
+                            <br><br>
+                            <div class="col-md-12 col-sm-4 col-lg text-center" id="selected_approve_star_user">
+                                <h3>User satisfaction rating</h3>
+                                <p>score: <span class="scoreNow2">0</span> out of
+                                    <span>5</span>
+                                </p>
+                                <ul class="ratingW2" style="padding-left: 0rem;">
+                                    <li class="javascript:void(0);">
+                                        <a href="javascript:void(0);">
+                                            <div class="star2"></div>
+                                        </a>
+                                    </li>
+                                    <li class="javascript:void(0);">
+                                        <a href="javascript:void(0);">
+                                            <div class="star2"></div>
+                                        </a>
+                                    </li>
+                                    <li class="javascript:void(0);">
+                                        <a href="javascript:void(0);">
+                                            <div class="star2"></div>
+                                        </a>
+                                    </li>
+                                    <li class="javascript:void(0);">
+                                        <a href="javascript:void(0);">
+                                            <div class="star2"></div>
+                                        </a>
+                                    </li>
+                                    <li class="javascript:void(0);">
+                                        <a href="javascript:void(0);">
+                                            <div class="star2"></div>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                            </div>
+                            <br><br>
+                            <div class="row">
+                                <!-- <div class="col-2"></div> -->
+                                <div class="col-6">
+                                    <div class="text-center">
+                                        <label>User Signature</label><br>
+                                    </div>
+                                    <img id="ticket_sign_user" style="width: 519px;height: 129;object-fit: cover;">
+                                    <br>
+                                    <div class="text-center">
+                                        <p id="user_name"></p><br>
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="text-center">
+                                        <label>Operator Signature</label><br>
+                                    </div>
+                                    <img id="ticket_sign_programmer"
+                                        style="width: 519px;height: 129;object-fit: cover;">
+                                    <div id="programmer_signature" style="width: 519px;height: 129;object-fit: cover;">
+                                    </div>
+                                    <br>
+                                    <div class="mb-3" id="file_programmer_signature">
+                                        <div class="hr-sect">or</div><br>
+                                        <input class="form-control" type="file" id="fileProgrammersignature"
+                                            accept="image/png, image/jpeg"
+                                            onchange="document.getElementById('outputFileProgrammersignature').src = window.URL.createObjectURL(this.files[0])">
+                                        <br><img id="outputFileProgrammersignature" />
+                                    </div>
+                                    <div class="text-center">
+                                        <p id="programmer_name"></p><br>
+                                        <button class="btn btn-secondary" id="clearSignProgrammer">Clear</button>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-2"></div> -->
+                            </div><br><br>
+                            <div class="row">
+                                <div class="col-3"></div>
+                                <div class="col-6 text-center">
+                                    <label>Approver Signature</label><br>
+                                    <img id="ticket_sign_manager" style="width: 519px;height: 129;object-fit: cover;">
+                                    <div id="manager_signature" style="width: 519px;height: 129;object-fit: cover;">
+                                    </div>
+                                    <br>
+                                    <div class="mb-3" id="file_manager_signature">
+                                        <div class="hr-sect">or</div><br>
+                                        <input class="form-control" type="file" id="fileManagersignature"
+                                            accept="image/png, image/jpeg"
+                                            onchange="document.getElementById('outputFileManagersignature').src = window.URL.createObjectURL(this.files[0])">
+                                        <br><img id="outputFileManagersignature" />
+                                    </div>
+                                    <p id="manager_name"></p><br>
+                                    <button class="btn btn-secondary" id="clearSignManager">Clear</button>
+                                </div>
+                                <div class="col-3"></div>
+                            </div><br><br>
+
+                            <div class="row">
+                                <div class="col-xs-6 text-end">
+                                    <button type="submit" class="btn btn-success" id="btn_edit_dev">Submit</button>
+                                    <button type="submit" class="btn btn-success"
+                                        id="btn_approve_ticket">Submit</button>
+                                    <button type="submit" class="btn btn-success"
+                                        id="btn_confirm_ticket">Submit</button>
+                                    <button type="submit" class="btn btn-success"
+                                        id="btn_approve_confirm">Submit</button>
+                                    <button type="submit" class="btn btn-success"
+                                        id="btn_changedev_confirm">Submit</button>
+                                    <button type="submit" class="btn btn-success"
+                                        id="btn_complete_ticket">Complete</button>
+                                    <button type="submit" class="btn btn-success"
+                                        id="btn_approve_ticket2">Submit</button>
+                                    <button type="submit" class="btn btn-success" id="btn_success">Submit</button>
+                                    <button type="submit" class="btn btn-success" id="btn_revise_ticket">Revise</button>
+                                    <button type="submit" class="btn btn-success" id="btn_rating_user">Submit</button>
+                                    <button type="submit" class="btn btn-success" id="btn_reject_user">Submit</button>
+                                    <button id="btn_cancel_add_ticket" name="cancel" class="btn btn-danger"
+                                        onclick="window.location='/dashboardUser';return false;">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div><br><br>
+
+            <%- include('footer') %>
+                <% } %>
+    </body>
+    <script type="text/javascript" src="../public/javascripts/ticketDetailUser.js"></script>
+    <script src="../public/javascripts/sessionCheck.js"></script>
+
+</html>

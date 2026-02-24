@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+    <%- include('head', { title: 'Manage User'}) %>
+    <body>
+        <%- include('header') %>
+        <div class="container">
+            <div class="row pt-5">
+                <div class="col">
+                    <% if(!session.user_id) { %>
+                    <script>
+                        document.location.href = '/'
+                    </script>
+
+                    <% } else { %>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-4 col-lg py-2">
+                            <div class="card h-100 border border-2">
+                                <div class="card-body">
+                                    <div class="pt-2 pb-2 text-end">
+                                        <button class="btn btn-success" onclick="window.location.href='/register'">Register</button>
+                                    </div>
+                                    <h1 class="card-ticket-header">Manage User</h1><br>
+                                    <div>
+                                        <table id="tableUser" class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>User Email</th>
+                                                    <th>User First Name</th>
+                                                    <th>User Last Name</th>
+                                                    <th>User Type Name</th>
+                                                    <th>Department</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><br><br>
+
+        <%- include('footer') %>
+        <% } %>
+    </body>
+    <script type="text/javascript"
+        src="../public/javascripts/manageUser.js"></script>
+    <script src="../public/javascripts/sessionCheck.js"></script>
+</html>

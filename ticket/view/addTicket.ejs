@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+
+    <%- include('head', { title: 'Create Ticket'}) %>
+
+    <body>
+        <%- include('header') %>
+        <!-- <div id="spinner-div" class="pt-5">
+        <div class="spinner-border text-primary" role="status">
+        </div>
+      </div> -->
+        <div class="loader"></div>
+        <div class="container">
+            <div class="pt-5">
+                <% if(!session.user_id) { %>
+                <script>
+                    document.location.href = '/'
+                </script>
+
+                <% } else { %>
+                <h1>Create Ticket</h1>
+            </div>
+        </div>
+        <input type="hidden" name="user_first_name" id="user_first_name"
+            value="<%= session.user_firstname %>">
+        <input type="hidden" name="user_last_name" id="user_last_name"
+            value="<%= session.user_lastname %>">
+        <input type="hidden" name="user_email" id="user_email"
+            value="<%= session.user_email %>">
+
+        <!-- Card -->
+        <div class="container">
+            <div class="card">
+                <div class="card-body">
+                    <form class="container" id="add_ticket_form"
+                        onsubmit="return false" autocomplete="off"
+                        enctype="multipart/form-data">
+                        <div class="row pt-3">
+                            <div class="col-md-6 col-sm-4 col-lg">
+                                <div class="mb-3">
+                                    <label for="ticket_department_selected"
+                                        class="form-label"
+                                        id="label_ticket_department">Assign to Department</label>
+                                    <select class="form-select"
+                                        id="ticket_department_selected">
+                                        <option value>Please select
+                                            department</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-4 col-lg">
+                                <div class="mb-3">
+                                    <label for="ticket_name"
+                                        class="form-label">Ticket Name</label>
+                                    <input type="text" class="form-control"
+                                        id="ticket_name" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-4 col-lg">
+                                <div class="mb-3">
+                                    <label for="ticket_estimate_date"
+                                        class="form-label">Estimate Date</label>
+                                    <input type="text" class="form-control"
+                                        id="ticket_estimate_date" required
+                                        readonly
+                                        style="background-color: white;color: black;">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-4 col-lg">
+                                <div class="mb-3">
+                                    <label for="ticket_project_name"
+                                        class="form-label">Project Code</label>
+                                    <select class="form-select"
+                                        aria-label="Default select Project"
+                                        id="ticket_project_name">
+                                        <option value>Please select
+                                            project</option>
+                                    </select>
+                                    <div class="mt-1">
+                                        <input type="checkbox"
+                                            id="ticket_project_name_other_checkbox">
+                                        <label
+                                            for="ticket_project_name_other_checkbox">อื่นๆ</label>
+                                        <div
+                                            id="ticket_project_name_other_form">
+                                            <input type="text"
+                                                class="form-control"
+                                                id="ticket_project_name_other">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-4 col-lg">
+                            <div class="mb-3">
+                                <label for="ticket_objective"
+                                    class="form-label">Objective</label>
+                                <textarea type="text" class="form-control"
+                                    id="ticket_objective" rows="5"
+                                    required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-4 col-lg">
+                            <div class="mb-3">
+                                <label for="ticket_description"
+                                    class="form-label">Description</label>
+                                <textarea type="text" class="form-control"
+                                    id="ticket_description" rows="5"
+                                    required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-4 col-lg">
+                            <div class="mb-3">
+                                <label class="form-label">Attachment</label>
+                                <div>
+                                    <label for="ticket_attachment"
+                                        id="label_ticket_attachment">
+                                        <input type="file"
+                                            id="ticket_attachment" multiple>
+                                        Upload Files
+                                    </label>
+                                </div>
+                                <div class="files">
+                                    <label>Files Selected</label>
+                                    <div id="files_selected"></div>
+                                </div>
+                            </div>
+                        </div><br><br>
+                        <div class="row">
+                            <div class="col-3"></div>
+                            <div class="col-6 text-center">
+                                <label>Signature</label>
+                                <div id="user_signature"
+                                    style="width: 100%;object-fit: cover;"></div>
+                                <img id="ticket_user_signature"
+                                    style="width: 100%;object-fit: cover;">
+                                <div class="hr-sect">or</div><br>
+                                <div class="mb-3" id="file_user_signature">
+                                    <input class="form-control" type="file"
+                                        id="fileUsersignature"
+                                        accept="image/png, image/jpeg"
+                                        onchange="document.getElementById('outputFileUsersignature').src = window.URL.createObjectURL(this.files[0])">
+                                    <br><img id="outputFileUsersignature" />
+                                </div>
+                                <p id="user_name"></p><br>
+                                <button class="btn btn-secondary"
+                                    id="clear">Clear</button>
+
+                            </div>
+                            <div class="col-3"></div>
+                        </div><br><br>
+
+                        <div class="row">
+                            <div class="col-xs-6 text-end">
+                                <button type="submit" class="btn btn-success"
+                                    id="btn_add_ticket">Submit</button>
+                                <button id="btn_cancel_add_ticket" name="cancel"
+                                    class="btn btn-danger"
+                                    onclick="window.location='/dashboardUser';return false;">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div><br><br>
+
+        <%- include('footer') %>
+        <% } %>
+    </body>
+    <script type="text/javascript"
+        src="../public/javascripts/functions.js"></script>
+    <script type="text/javascript"
+        src="../public/javascripts/addTicket.js"></script>
+    <script src="../public/javascripts/sessionCheck.js"></script>
+</html>

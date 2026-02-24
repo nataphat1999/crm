@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<%- include('head', { title: 'Dashboard'}) %>
+
+    <body>
+        <%- include('header') %>
+            <div class="container">
+                <div class="row pt-5">
+                    <div class="col">
+                        <% if(!session.user_id) { %>
+                            <script>
+                                document.location.href = '/'
+                            </script>
+
+                            <% } else { %>
+                                <h1>Dashboard</h1>
+                    </div>
+                    <div class="col text-end">
+                        <button class="btn btn-success" id="btn_add_ticket"><a
+                            href="/addTicket"
+                            class="text-white text-decoration-none">Add
+                            Ticket</a></button>
+                    </div>
+                </div>
+                <input type="hidden" name="user_type" id="user_type" value="<%= session.user_type_id %>">
+                <input type="hidden" name="user_name_data" id="user_name_data" value="<%= session.user_firstname %> <%= session.user_lastname %>">
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                      <div class="row">
+
+                        <div class="col-md-3 mb-3">
+                            <label for="startDate" class="form-label">Ticket Created From</label>
+                            <input type="text" class="form-control datepicker" id="startDate" name="start_date" placeholder="DD/MM/YYYY">
+                        </div>
+                        
+                        <div class="col-md-3 mb-3">
+                            <label for="endDate" class="form-label">Ticket Created To</label>
+                            <input type="text" class="form-control datepicker" id="endDate" name="end_date" placeholder="DD/MM/YYYY">
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="project_code" class="form-label">Project Code</label>
+                            <select id="project_code" class="form-select" name="project_code">
+                              <option value="">All</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="customer_crm" class="form-label">Customer</label>
+                            <select id="customer_crm" class="form-select" name="customer_crm">
+                              <option value="">All</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="department" class="form-label">Department</label>
+                            <select id="department" class="form-select" name="department">
+                              <option value="">All</option>
+                            </select>
+                        </div>
+                          
+                        <div class="col-md-3 mb-3">
+                          <label for="operator" class="form-label">Operator Name</label>
+                          <select id="operator" class="form-select" name="operator">
+                            <option value="">All</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                  
+                <!-- card  User-->
+                <div class="row pt-3 pb-5" id="card_user">
+                    <div class="col-md-3 col-sm-4 col-lg py-2">
+                        <div class="card h-100 border border-2" style="border-radius: 8px;">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <h5 class="card-title">Ticket Total</h5>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn pull-right" style="border-radius: 8px; background-color: #7B61FF;" onclick="getTicket(0)">
+                                        <img class="card-icon"
+                                            src="../public/images/icon/google-docs.png" />
+                                    </button>
+                                    </div>
+                                </div>
+                                <p class="card-text" id="total_monthly_ticket"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-4 col-lg py-2">
+                        <div class="card h-100 border border-2" style="border-radius: 8px;">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <h5 class="card-title">Ticket : Waiting</h5>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn pull-right" style="border-radius: 8px; background-color: #C433FF;" onclick="getTicket(1)">
+                                        <img class="card-icon"
+                                            src="../public/images/icon/time-left.png" />
+                                    </button>
+                                    </div>
+                                </div>
+                                <p class="card-text" id="total_waiting"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-4 col-lg py-2">
+                        <div class="card h-100 border border-2" style="border-radius: 8px;">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <h5 class="card-title">Ticket : In Process
+                                        </h5>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn pull-right" style="border-radius: 8px; background-color: #61D9FF;" onclick="getTicket(2)">
+                                        <img class="card-icon"
+                                            src="../public/images/icon/man-working-on-a-laptop-from-side-view.png" />
+                                    </button>
+                                    </div>
+                                </div>
+                                <p class="card-text" id="total_in_process"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-4 col-lg py-2">
+                        <div class="card h-100 border border-2" style="border-radius: 8px;">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <h5 class="card-title">Ticket : Disapprove
+                                        </h5>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn pull-right" style="border-radius: 8px; background-color: #F75D5F;" onclick="getTicket(7)">
+                                        <img class="card-icon"
+                                            src="../public/images/icon/paper.png" />
+                                    </button>
+                                    </div>
+                                </div>
+                                <p class="card-text" id="total_disapprove"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-4 col-lg py-2">
+                        <div class="card h-100 border border-2" style="border-radius: 8px;">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <h5 class="card-title">Ticket : Reject</h5>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn pull-right" style="border-radius: 8px; background-color: #ff6f00;" onclick="getTicket(9)">
+                                        <img class="card-icon"
+                                            src="../public/images/icon/rejected-file.png" />
+                                    </button>
+                                    </div>
+                                </div>
+                                <p class="card-text" id="total_reject"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-4 col-lg py-2">
+                        <div class="card h-100 border border-2" style="border-radius: 8px;">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <h5 class="card-title">Ticket : Cancel</h5>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn pull-right" style="border-radius: 8px; background-color: #808080;" onclick="getTicket(8)">
+                                        <img class="card-icon"
+                                            src="../public/images/icon/x.png" />
+                                    </button>
+                                    </div>
+                                </div>
+                                <p class="card-text" id="total_cancel"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-4 col-lg py-2">
+                        <div class="card h-100 border border-2" style="border-radius: 8px;">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <h5 class="card-title">Ticket : Waiting user approve
+                                        </h5>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn pull-right" style="border-radius: 8px; background-color: #DFD187;" onclick="getTicket(10)">
+                                        <img class="card-icon"
+                                            src="../public/images/icon/time-left.png" />
+                                    </button>
+                                    </div>
+                                </div>
+                                <p class="card-text" id="total_waiting_user_approve"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-4 col-lg py-2">
+                        <div class="card h-100 border border-2" style="border-radius: 8px;">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <h5 class="card-title">Ticket : User Reject
+                                        </h5>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn pull-right" style="border-radius: 8px; background-color: #B89169;" onclick="getTicket(11)">
+                                        <img class="card-icon"
+                                            src="../public/images/icon/rejected-file.png" />
+                                    </button>
+                                    </div>
+                                </div>
+                                <p class="card-text" id="total_user_reject"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-4 col-lg py-2">
+                        <div class="card h-100 border border-2" style="border-radius: 8px;">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <h5 class="card-title">Ticket : Success</h5>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn pull-right" style="border-radius: 8px; background-color: #0FCA7A;" onclick="getTicket(6)">
+                                        <img class="card-icon"
+                                            src="../public/images/icon/approval.png" />
+                                    </button>
+                                    </div>
+                                </div>
+                                <p class="card-text" id="total_sucess"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Graph&Table -->
+                <div class="row">
+                    <div class="col-md-12 col-sm-4 col-lg py-2">
+                        <div class="card h-100 border border-2">
+                            <div class="card-body">
+                                <h1 class="card-ticket-header pb-4">Tickets</h1>
+                                <div class="d-none d-flex align-items-center justify-content-center" id="ChartArea">
+                                    <div class="col-md-4 col-sm-4 col-lg">
+                                        <canvas id="TicketChart"></canvas>
+                                    </div>
+                                </div>
+                                <div>
+                                    <table id="tableTickets" class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>#</th>
+                                                <th>Ticket No</th>
+                                                <th>Ticket Name</th>
+                                                <th>Ticket Status</th>
+                                                <th>Progress Status</th>
+                                                <th>Progress</th>
+                                                <th>Ticket Due Date</th>
+                                                <th>Ticket Date</th>
+                                                <th>Project Code</th>
+                                                <th>Customer Name</th>
+                                                <th>User Name</th>
+                                                <th>User Department</th>
+                                                <th>Operator Name</th>
+                                                <th>Ticket Estimate Date</th>
+                                                <th>Ticket Start Date</th>
+                                                <th>Ticket End Date</th>
+                                                <th>Average Rating</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><br><br>
+
+            <%- include('footer') %>
+                <% } %>
+    </body>
+    <script type="text/javascript" src="../public/javascripts/dashboardUser.js"></script>
+    <script src="../public/javascripts/sessionCheck.js"></script>
+
+</html>
