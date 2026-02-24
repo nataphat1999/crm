@@ -1,4 +1,4 @@
-✈️ CRM System: Travel Expense Module
+✈️ **CRM System: Travel Expense Module**
 This repository contains the Travel Expense management module, a core component of our CRM system developed using the Yii2 Framework. It streamlines the process of reimbursement requests and approval tracking
 
 📑 Features
@@ -14,5 +14,16 @@ Based on the current repository organization:
 - **models/TravelExpenseSearch.php**: Logic for filtering and searching
 - **models/TravelExpenseApproval.php**: Manages the approval history and status changes
 - **view/travel-expense/**: Contains the UI components (forms, index, and PDF templates)
+
+🎫 **Ticket Management Module**
+This project features a Ticket Management System that allows users to open support requests It includes Role-Based Dashboards for monitoring real-time ticket statuses and providing Detailed Views for efficient issue tracking and resolution
+
+📂 **Evidence Management Module**
+📑 Key Features
+- Evidence Creation
+- Case Association
+- Version History
+- Evidence Management
+
 
 
